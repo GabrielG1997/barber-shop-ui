@@ -2,10 +2,10 @@ export interface ClientModelForm{
     id?:number
     name:string
     email:string
-    phone:string
-} export interface ClientModelTabel{
+    cellphone:string
+} export interface ClientModelTable{
     id:number
     name:string
     email:string
-    phone:string
+    cellphone:string
 } 

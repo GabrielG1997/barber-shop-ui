@@ -17,7 +17,7 @@ export class ClientsService implements IClientService{
     return this.http.post<SaveClientResponse>(`${this.baseUrl}clients`, request)
   }
   update(id: number, request: UpdateClientRequest): Observable<UpdateClientResponse> {
-    return this.http.put<UpdateClientResponse>(`${this.baseUrl}clients/${id}`, request)
+    return this.http.put<UpdateClientResponse>(`${this.baseUrl}clients/edit-client/${id}`, request)
   }
   delete(id: number): Observable<void> {
     return this.http.delete<void>(`${this.baseUrl}clients/${id}`)

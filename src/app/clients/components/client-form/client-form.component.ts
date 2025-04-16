@@ -20,7 +20,7 @@ import{ MatButtonModule } from '@angular/material/button';
   styleUrl: './client-form.component.scss'
 })
 export class ClientFormComponent {
-  @Input() client: ClientModelForm = {id:0, name:'', email:'', phone:''}
+  @Input() client: ClientModelForm = {id:0, name:'', email:'', cellphone:''}
 
   @Output() clientSubmitted = new EventEmitter<ClientModelForm>();
 
