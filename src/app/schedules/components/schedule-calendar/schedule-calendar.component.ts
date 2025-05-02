@@ -18,6 +18,8 @@ import { IDialogManagerService } from '../../../services/idialog-manager.service
 import { YesNoDialogComponent } from '../../../commons/components/yes-no-dialog/yes-no-dialog.component';
 import { Subscription } from 'rxjs';
 import { CommonModule } from '@angular/common';
+import { log } from 'node:console';
+import { btoa } from 'node:buffer';
 
 
 
@@ -53,7 +55,7 @@ export class ScheduleCalendarComponent implements AfterViewInit, OnDestroy, OnCh
 
   addingSchedule:boolean = false
   
-  newSchedule: SaveScheduleModel = {startAt:undefined, endAt:undefined, clientId:undefined}
+  newSchedule: SaveScheduleModel = {id:"",startAt:undefined, endAt:undefined, clientId:undefined}
   
   clientSelectFormControl = new FormControl()
 
@@ -71,13 +73,12 @@ export class ScheduleCalendarComponent implements AfterViewInit, OnDestroy, OnCh
   get selected():Date{
     return this._selected
   }
-  set selected(selected:Date){
-    if(this.selected.getTime() === selected.getTime()){
-      this.onDateChange.emit(selected)
-      this.buildTable()
-      this.selected = selected
+  set selected(selected: Date) {
+    if (this._selected.getTime() !== selected.getTime()) {
+      this._selected = selected;
+      this.onDateChange.emit(selected);
+      this.buildTable();
     }
-
   }
   ngOnDestroy(): void {
     if(this.subscription){
@@ -95,11 +96,15 @@ export class ScheduleCalendarComponent implements AfterViewInit, OnDestroy, OnCh
     }
   }
   onTimeChange(time: Date) {
-    const endAt = new Date(time)
-    endAt.setHours(time.getHours()+1)
-    this.newSchedule.endAt= endAt
+    if(time){
+      const endAt = new Date(time)
+      endAt.setHours(time.getHours()+1)
+      this.newSchedule.endAt= endAt  
+    }
+    
   }
   requestDelete(schedule:ClientScheduleAppointmentModel){
+    console.log("RequestDelete: props -> " + schedule.startAt, schedule.endAt)
     this.subscription = this.dialogManagerService.showYesNoDialog(
       YesNoDialogComponent,{title:'Appointment Exclusion', content:'Are you sure you want to delete this appointment?'}
     ).subscribe(result => {
@@ -119,26 +124,29 @@ export class ScheduleCalendarComponent implements AfterViewInit, OnDestroy, OnCh
     const endAt = new Date(this._selected)
     startAt.setHours(this.newSchedule.startAt!.getHours(),this.newSchedule.startAt!.getMinutes())
     endAt.setHours(this.newSchedule.endAt!.getHours(),this.newSchedule.endAt!.getMinutes())
+    const id =`${this.newSchedule.clientId}_D${startAt.getDate()}H${startAt.getHours()}M${startAt.getMinutes()}`
     const saved: ClientScheduleAppointmentModel ={
-      id:-1, //todo
+      id,
       clientId: this.newSchedule.clientId!,
       clientName: this.clients.find(c=> c.id === this.newSchedule.clientId!)!.name,
-      day: this._selected.getDate(),
+      day: this._selected.getDay(),
       endAt,
       startAt
     }
     this.monthSchedule.scheduledAppointments.push(saved)
+    console.log(saved)
     this.onScheduleClient.emit(saved)
     this.buildTable()
     form.resetForm()
-    this.newSchedule = {startAt:undefined, endAt:undefined, clientId:undefined}
+    this.newSchedule = {id:"", startAt:undefined, endAt:undefined, clientId:undefined}
   }
   private buildTable(){
     console.log('buildTable executed')
     const appointments = this.monthSchedule.scheduledAppointments.filter(
       a => this.monthSchedule.year === this._selected.getFullYear() && 
-      this.monthSchedule.month -1 === this._selected.getMonth() &&
-      a.day === this._selected.getDate()
+      this.monthSchedule.month -1 === this._selected.getMonth() 
+       &&
+       a.day === this._selected.getDate()
       )
     this.dataSource = new MatTableDataSource<ClientScheduleAppointmentModel>(appointments)
     if(this.paginator){

@@ -52,6 +52,7 @@ export class SchedulesMonthComponent implements OnInit, OnDestroy{
   onScheduleClient(schedule: SaveScheduleModel) {
     if(schedule.startAt && schedule.endAt && schedule.clientId){
       const request: SaveScheduleRequest ={
+        id:schedule.id,
         startAt:schedule.startAt,
         endAt:schedule.endAt,
         clientId:schedule.clientId

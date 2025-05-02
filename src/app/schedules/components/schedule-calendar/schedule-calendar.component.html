@@ -42,18 +42,18 @@
     <div class="row">
         <div class="col-6">
             <mat-card class="calendar-card">
-                <mat-calendar [(selected)]="_selected"></mat-calendar>
+                <mat-calendar [(selected)]="selected"></mat-calendar>
             </mat-card>
         </div>
         <div class="col-6">
             <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
                 <ng-container matColumnDef="startAt">
                     <th mat-header-cell *matHeaderCellDef>Begin</th>
-                    <td mat-cell *matCellDef="let schedule">{{schedule.startAt | date:'HH:mm a'}}</td>
+                    <td mat-cell *matCellDef="let schedule">{{schedule.startAt | date:'dd-MM HH:mm a'}}</td>
                 </ng-container>
                 <ng-container matColumnDef="endAt">
                     <th mat-header-cell *matHeaderCellDef>End</th>
-                    <td mat-cell *matCellDef="let schedule">{{schedule.endAt | date:'HH:mm a'}}</td>
+                    <td mat-cell *matCellDef="let schedule">{{schedule.endAt | date:'dd-MM HH:mm a'}}</td>
                 </ng-container>
                 <ng-container matColumnDef="client">
                     <th mat-header-cell *matHeaderCellDef>Name</th>

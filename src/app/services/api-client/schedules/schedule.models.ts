@@ -4,7 +4,7 @@ export interface ScheduleAppointmentMonthResponse{
     scheduledAppointments: ClientScheduleAppointmentResponse[]
 }
 export interface ClientScheduleAppointmentResponse{
-    id:number
+    id:string
     day:number
     startAt:Date
     endAt:Date
@@ -13,7 +13,7 @@ export interface ClientScheduleAppointmentResponse{
 }
 
 export interface SaveScheduleRequest{
-    id?:number
+    id:string
     startAt:Date
     endAt:Date
     clientId:number

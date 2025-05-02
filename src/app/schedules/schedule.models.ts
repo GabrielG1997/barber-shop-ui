@@ -6,7 +6,7 @@ export interface ScheduleAppointmentMonthModel{
 }
 
 export interface ClientScheduleAppointmentModel{
-    id:number
+    id: string
     day:number
     startAt:Date
     endAt:Date
@@ -15,6 +15,7 @@ export interface ClientScheduleAppointmentModel{
 }
 
 export interface SaveScheduleModel{
+    id: string
     startAt?:Date
     endAt?:Date
     clientId?:number
